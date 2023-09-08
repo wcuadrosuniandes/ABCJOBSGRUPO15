@@ -18,25 +18,25 @@ class VistaCandidate(Resource):
                 )
                 db.session.add(candidate)
                 db.session.commit()
-                return jsonify(
-                    correo=candidate.correo,
-                    mensaje="Candidato creado exitosamente",
-                    status="200"
-                )
+                return {
+                    "correo":candidate.correo,
+                    "mensaje":"Candidato creado exitosamente",
+                    "status":"200"
+                }, 200
             else:
                 option_error = random.randint(1, 3)
                 if option_error == 1:
-                    return jsonify(
-                        correo="",
-                        mensaje="Candidato creado exitosamente",
-                        status="200"
-                    )
+                    return {
+                        "correo":"",
+                        "mensaje":"Candidato creado exitosamente",
+                        "status":"200"
+                    }, 200
                 elif option_error == 2:
                     raise ConnectionError('Error en coneccion ')
                 else:
                     raise NotImplementedError('El servicio no se encuentra disponible')
         except ConnectionError as e:
-            return {'error': 'Servicio RegisterCandidate offline -- ConnectionError -  + str(e)'}, 404
+            return {'error': 'Servicio RegisterCandidate offline -- ConnectionError - ' + str(e)}, 404
         except Exception as e:
-            return {'error': 'Servicio RegisterCandidate - Internal error - ' + str(e)}, 404
+            return {'error': f'Servicio RegisterCandidate - Internal error - ' + str(e)}, 404
        
